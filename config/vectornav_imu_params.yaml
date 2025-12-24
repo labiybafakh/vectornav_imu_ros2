@@ -1,0 +1,9 @@
+vectornav_imu_publisher:
+  ros__parameters:
+    # Serial port configuration
+    port: "/dev/ttyUSB0"
+    baud_rate: 115200
+
+    # ROS2 configuration
+    frame_id: "imu_link"
+    publish_rate: 100.0  # Hz
