@@ -10,7 +10,7 @@ VectorNavImuPublisher::VectorNavImuPublisher()
     declare_parameter<std::string>("port", "/dev/ttyUSB0");
     declare_parameter<int>("baud_rate", 115200);
     declare_parameter<std::string>("frame_id", "imu_link");
-    declare_parameter<double>("publish_rate", 100.0);
+    declare_parameter<double>("publish_rate", 200.0);
 
     // Get parameters
     port_ = get_parameter("port").as_string();

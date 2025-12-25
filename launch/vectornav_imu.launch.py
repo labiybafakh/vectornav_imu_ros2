@@ -6,29 +6,17 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
-    # Declare launch arguments
-    port_arg = DeclareLaunchArgument(
-        'port',
-        default_value='/dev/ttyUSB0',
-        description='Serial port for VectorNav sensor'
-    )
+    # Get the package directory
+    package_dir = get_package_share_directory('vectornav_imu_ros2')
 
-    baud_rate_arg = DeclareLaunchArgument(
-        'baud_rate',
-        default_value='115200',
-        description='Baud rate for VectorNav sensor'
-    )
+    # Path to the config file
+    config_file = os.path.join(package_dir, 'config', 'vectornav_imu_params.yaml')
 
-    frame_id_arg = DeclareLaunchArgument(
-        'frame_id',
-        default_value='imu_link',
-        description='Frame ID for IMU messages'
-    )
-
-    publish_rate_arg = DeclareLaunchArgument(
-        'publish_rate',
-        default_value='100.0',
-        description='Publishing rate in Hz'
+    # Declare launch argument for config file path (optional override)
+    config_arg = DeclareLaunchArgument(
+        'config_file',
+        default_value=config_file,
+        description='Path to the configuration file'
     )
 
     # VectorNav IMU node
@@ -37,21 +25,13 @@ def generate_launch_description():
         executable='vectornav_imu_node',
         name='vectornav_imu_publisher',
         output='screen',
-        parameters=[{
-            'port': LaunchConfiguration('port'),
-            'baud_rate': LaunchConfiguration('baud_rate'),
-            'frame_id': LaunchConfiguration('frame_id'),
-            'publish_rate': LaunchConfiguration('publish_rate'),
-        }],
+        parameters=[LaunchConfiguration('config_file')],
         remappings=[
             ('imu/data', 'imu/data')
         ]
     )
 
     return LaunchDescription([
-        port_arg,
-        baud_rate_arg,
-        frame_id_arg,
-        publish_rate_arg,
+        config_arg,
         vectornav_imu_node
     ])
